@@ -1,0 +1,80 @@
+﻿@page "/version0"
+@inject IJSRuntime JS
+
+<PageTitle>version0</PageTitle>
+
+<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data.Select(d => d.Item2).ToArray()" InputLabels="data.Select(l => l.Item1).ToArray()">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @orders.Count</text>
+    </CustomGraphics>
+</MudChart>
+
+@foreach (var item in orders)
+{
+    <OrderList OrderGuid="@item.OrderGuid"
+               FirstName="@item.Customer.FirstName"
+               LastName="@item.Customer.LastName"
+               City="@item.Customer.Address.City"
+               Street="@item.Customer.Address.Street"
+               StreetNumber="@item.Customer.Address.StreetNumber"
+               ZipCode="@item.Customer.Address.ZipCode"
+               Country="@item.Customer.Address.Country"
+               OrderDate="@item.OrderDate"
+               OrderStatus="@item.OrderStatus"
+               OrderItems="@item.OrderItems" />
+}
+
+<script>
+    function updateCardHeaderColorByGuid(orderGuid, color) {
+    let card = document.getElementById(orderGuid);
+
+    if (card) {
+    let header = card.querySelector(".card-header");
+    let prefix = "bg-";
+
+    header?.classList.forEach(cls => {
+    if (cls.startsWith(prefix)) {
+    header.classList.replace(cls, prefix+color);
+    }
+    });
+    }
+    }
+</script>
+
+
+
+@code {
+    public List<Order> orders { get; set; } = new();
+    public List<(string, double)> data = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        orders = DataFaker.CreateFakeOrder(10);
+        PopulateChart();
+        return base.OnInitializedAsync();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        VisualizeOrderStatusSuccess();
+    }
+
+    private void VisualizeOrderStatusSuccess()
+    {
+        foreach (var order in orders)
+        {
+            if (order.OrderStatus == OrderState.Arrived)
+            {
+                JS.InvokeVoidAsync("updateCardHeaderColorByGuid", order.OrderGuid, "success");
+            }
+        }
+    }
+
+    private void PopulateChart()
+    {
+        var finishedOrders = orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
+
+        data.Add(($"Unfinished orders ({orders.Count - finishedOrders})", orders.Count - finishedOrders));
+        data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
+    }
+}
