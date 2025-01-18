@@ -1,27 +1,29 @@
 ﻿@page "/version0"
+@using System.Diagnostics
 @inject IJSRuntime JS
+@inject IConfiguration Config
 
 <PageTitle>version0</PageTitle>
 
-<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@data.Select(d => d.Item2).ToArray()" InputLabels="data.Select(l => l.Item1).ToArray()">
+<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
-        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @orders.Count</text>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @Orders.Count</text>
     </CustomGraphics>
 </MudChart>
 
-@foreach (var item in orders)
+@foreach (var item in Orders)
 {
     <OrderList OrderGuid="@item.OrderGuid"
-               FirstName="@item.Customer.FirstName"
-               LastName="@item.Customer.LastName"
-               City="@item.Customer.Address.City"
-               Street="@item.Customer.Address.Street"
-               StreetNumber="@item.Customer.Address.StreetNumber"
-               ZipCode="@item.Customer.Address.ZipCode"
-               Country="@item.Customer.Address.Country"
-               OrderDate="@item.OrderDate"
-               OrderStatus="@item.OrderStatus"
-               OrderItems="@item.OrderItems" />
+    FirstName="@item.Customer.FirstName"
+    LastName="@item.Customer.LastName"
+    City="@item.Customer.Address.City"
+    Street="@item.Customer.Address.Street"
+    StreetNumber="@item.Customer.Address.StreetNumber"
+    ZipCode="@item.Customer.Address.ZipCode"
+    Country="@item.Customer.Address.Country"
+    OrderDate="@item.OrderDate"
+    OrderStatus="@item.OrderStatus"
+    OrderItems="@item.OrderItems" />
 }
 
 <script>
@@ -44,24 +46,50 @@
 
 
 @code {
-    public List<Order> orders { get; set; } = new();
-    public List<(string, double)> data = new();
+    public List<Order> Orders { get; set; } = new();
+    public List<(string, double)> Data = new();
+    private bool isBenchmark => Config.GetValue<bool>("IsBenchmark");
+
 
     protected override Task OnInitializedAsync()
     {
-        orders = DataFaker.CreateFakeOrder(10);
-        PopulateChart();
+        if (isBenchmark)
+        {
+            BenchmarkHelper.InvokeWithBenchmark(this, nameof(this.PopulateOrders), 10, 100);
+            BenchmarkHelper.InvokeWithBenchmark(this, nameof(this.PopulateChart), 10);
+        }
+        else
+        {
+            PopulateOrders(10);
+            PopulateChart();
+        }
+
         return base.OnInitializedAsync();
     }
 
+
+
     protected override void OnAfterRender(bool firstRender)
     {
-        VisualizeOrderStatusSuccess();
+        if (isBenchmark)
+        {
+            BenchmarkHelper.InvokeWithBenchmark(this, nameof(this.VisualizeOrderStatusSuccess), 10);
+        }
+        else
+        {
+            VisualizeOrderStatusSuccess();
+        }
+    }
+
+    private void PopulateOrders(int countOrders)
+    {
+        Orders.Clear();
+        Orders = DataFaker.CreateFakeOrders(countOrders);
     }
 
     private void VisualizeOrderStatusSuccess()
     {
-        foreach (var order in orders)
+        foreach (var order in Orders)
         {
             if (order.OrderStatus == OrderState.Arrived)
             {
@@ -72,9 +100,9 @@
 
     private void PopulateChart()
     {
-        var finishedOrders = orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
+        var finishedOrders = Orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
 
-        data.Add(($"Unfinished orders ({orders.Count - finishedOrders})", orders.Count - finishedOrders));
-        data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
+        Data.Add(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
+        Data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
     }
 }

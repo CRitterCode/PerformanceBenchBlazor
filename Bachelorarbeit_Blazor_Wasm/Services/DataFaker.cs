@@ -1,13 +1,14 @@
 ﻿using Bachelorarbeit_Blazor_Wasm.Entities;
+using Bachelorarbeit_Blazor_Wasm.Helpers.Attributes;
 using Bogus;
 
 namespace Bachelorarbeit_Blazor_Wasm.Services
 {
     public static class DataFaker
     {
-        public static List<Order> CreateFakeOrder(int numberOfOrders)
+        public static List<Order> CreateFakeOrders(int numberOfOrders)
         {
-            var bogusFaker = new Faker();
+            var bogusFaker = new Faker();            
             var orders = new List<Order>();
 
             for (int cOrder = 0; cOrder < numberOfOrders; cOrder++)
@@ -25,6 +26,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Services
                         ZipCode = bogusFaker.Address.ZipCode()
                     }
                 };
+                
 
                 var order = new Order
                 {
