@@ -1,8 +1,7 @@
 using Bachelorarbeit_Blazor_Wasm;
-using Bachelorarbeit_Blazor_Wasm.Services;
+using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.JSInterop;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -14,6 +13,7 @@ builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddSingleton<BenchmarkUtil>();
 builder.Services.AddMudServices();
 
 

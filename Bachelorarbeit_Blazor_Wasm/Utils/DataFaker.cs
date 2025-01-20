@@ -1,8 +1,7 @@
 ﻿using Bachelorarbeit_Blazor_Wasm.Entities;
-using Bachelorarbeit_Blazor_Wasm.Helpers.Attributes;
 using Bogus;
 
-namespace Bachelorarbeit_Blazor_Wasm.Services
+namespace Bachelorarbeit_Blazor_Wasm.Utils
 {
     public static class DataFaker
     {

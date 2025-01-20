@@ -1,4 +1,4 @@
-﻿@page "/version0"
+﻿@page "/version1"
 @inherits VersionComponentBase
 
 <PageTitle>version0</PageTitle>
@@ -11,19 +11,9 @@
 
 @foreach (var item in Orders)
 {
-    <OrderListParameter OrderGuid="@item.OrderGuid"
-    FirstName="@item.Customer.FirstName"
-    LastName="@item.Customer.LastName"
-    City="@item.Customer.Address.City"
-    Street="@item.Customer.Address.Street"
-    StreetNumber="@item.Customer.Address.StreetNumber"
-    ZipCode="@item.Customer.Address.ZipCode"
-    Country="@item.Customer.Address.Country"
-    OrderDate="@item.OrderDate"
-    OrderStatus="@item.OrderStatus"
-    OrderItems="@item.OrderItems" />
+    <OrderListObject Order="item">
+    </OrderListObject>
 }
-
 
 @code {
 
