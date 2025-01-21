@@ -2,7 +2,9 @@
 using Bachelorarbeit_Blazor_Wasm.Pages;
 using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
+using System.Runtime.CompilerServices;
 
 namespace Bachelorarbeit_Blazor_Wasm.Shared
 {
@@ -48,44 +50,54 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         protected void PopulateChartSumRevenueByYear()
         {
-
+      
         }
 
-        protected override Task OnInitializedAsync()
+        public override Task SetParametersAsync(ParameterView parameters) {
+            BenchmarkUtil.StartStopWatch();
+            return base.SetParametersAsync(parameters); 
+        }
+
+
+        protected async override Task OnInitializedAsync()
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.GenerateOrders), 100);
+                BenchmarkUtil.SetMarker("SetParam_OnInit");
+                BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.GenerateOrders), 1000);
                 BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.PopulateChartOrderState));
+                BenchmarkUtil.SetMarker("OnInit");
             }
             else
             {
-                GenerateOrders(10);
+                GenerateOrders(1000);
                 PopulateChartOrderState();
             }
 
-            return base.OnInitializedAsync();
+            await base.OnInitializedAsync();
         }
 
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (IsBenchmark)
+            if (firstRender)
             {
-                BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.VisualizeOrderStatusSuccess));
-
-                if (Config.GetValue<bool>("SaveBenchmark"))
+                if (IsBenchmark)
                 {
-                    await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
+                    BenchmarkUtil.SetMarker("OnInit_OnAfterRender");
+                    BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.VisualizeOrderStatusSuccess));
+
+                    if (Config.GetValue<bool>("SaveBenchmark"))
+                    {
+                        await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
+                    }
                 }
-            }
-            else
-            {
-                VisualizeOrderStatusSuccess();
+                else
+                {
+                    VisualizeOrderStatusSuccess();
+                }
             }
             await base.OnAfterRenderAsync(firstRender);
         }
-
-
     }
 }

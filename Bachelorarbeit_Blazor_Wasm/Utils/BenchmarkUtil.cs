@@ -2,6 +2,7 @@
 using Microsoft.JSInterop;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Bachelorarbeit_Blazor_Wasm.Utils
 {
@@ -10,6 +11,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public Guid Identifier { get; set; } = Guid.NewGuid();
         public List<string> Results { get; set; } = new() { "ObjInstance,Identifier,MethodName,ElpasedMilliseconds\n" };
         public int Repeat => Config.GetValue<int>("RepeatBenchmark");
+        private Stopwatch _stopwatch { get; set; } = new();
 
         public IConfiguration Config { get; set; }
 
@@ -36,10 +38,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
 
                         stopwatch.Stop();
 
-                        Results.Add($"{objInstance.GetType().Name},{Identifier},{methodName},{stopwatch.ElapsedMilliseconds}\n");
+                        Results.Add($"{Identifier},{methodName},{stopwatch.ElapsedMilliseconds}\n"); //{objInstance.GetType().Name}
                         Console.WriteLine($"{methodName} - {stopwatch.ElapsedMilliseconds} ms");
                     }
-
                 }
                 else
                 {
@@ -47,6 +48,31 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
                 }
             }
             return Results;
+        }
+
+        public void StartStopWatch()
+        {
+            if (!_stopwatch.IsRunning)
+            {
+                _stopwatch.Start();
+            }
+        }
+
+        public void ResetStopWatch()
+        {
+            if (_stopwatch.IsRunning)
+            {
+                _stopwatch.Reset();
+            }
+        }
+
+        public void SetMarker(string marker)
+        {
+            if (_stopwatch.IsRunning)
+            {
+                Results.Add($"{Identifier},{marker},{_stopwatch.ElapsedMilliseconds}\n");
+                Console.WriteLine($"{marker} - {_stopwatch.ElapsedMilliseconds} ms");
+            }
         }
 
         public async ValueTask<object> DownloadFileAsync(IJSRuntime js, string fileName = "")
