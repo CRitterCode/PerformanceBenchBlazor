@@ -15,7 +15,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
         [Inject]
-        private BenchmarkUtil BenchmarkUtil { get; set; }
+        protected BenchmarkUtil BenchmarkUtil { get; set; }
 
         [Inject]
         public IJSRuntime JS { get; set; }
@@ -54,10 +54,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         }
 
         public override Task SetParametersAsync(ParameterView parameters) {
-            BenchmarkUtil.StartStopWatch();
+            BenchmarkUtil.StartWatch();
             return base.SetParametersAsync(parameters); 
         }
-
 
         protected async override Task OnInitializedAsync()
         {
@@ -77,6 +76,12 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             await base.OnInitializedAsync();
         }
 
+        protected override Task OnParametersSetAsync()
+        {
+            BenchmarkUtil.SetMarker("OnInit_OnParameter");
+            return base.OnParametersSetAsync();
+        }
+
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -86,6 +91,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 {
                     BenchmarkUtil.SetMarker("OnInit_OnAfterRender");
                     BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.VisualizeOrderStatusSuccess));
+                    BenchmarkUtil.ResetWatch();
 
                     if (Config.GetValue<bool>("SaveBenchmark"))
                     {

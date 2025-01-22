@@ -50,7 +50,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
             return Results;
         }
 
-        public void StartStopWatch()
+        public void StartWatch()
         {
             if (!_stopwatch.IsRunning)
             {
@@ -58,7 +58,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
             }
         }
 
-        public void ResetStopWatch()
+        public void ResetWatch()
         {
             if (_stopwatch.IsRunning)
             {

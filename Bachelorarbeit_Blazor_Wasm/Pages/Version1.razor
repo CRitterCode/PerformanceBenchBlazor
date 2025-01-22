@@ -1,7 +1,7 @@
 ﻿@page "/version1"
 @inherits VersionComponentBase
 
-<PageTitle>version0</PageTitle>
+<h3>Version1</h3>
 
 <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
@@ -11,8 +11,19 @@
 
 @foreach (var item in Orders)
 {
-    <OrderListObject Order="item">
-    </OrderListObject>
+    <OrderListSetOnParameter OrderGuid="@item.OrderGuid"
+    FirstName="@item.Customer.FirstName"
+    LastName="@item.Customer.LastName"
+    City="@item.Customer.Address.City"
+    Street="@item.Customer.Address.Street"
+    StreetNumber="@item.Customer.Address.StreetNumber"
+    ZipCode="@item.Customer.Address.ZipCode"
+    Country="@item.Customer.Address.Country"
+    OrderDate="@item.OrderDate"
+    OrderStatus="@item.OrderStatus"
+    OrderItems="@item.OrderItems"
+    ></OrderListSetOnParameter>
+
 }
 
 @code {
