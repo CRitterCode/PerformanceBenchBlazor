@@ -12,18 +12,20 @@
 @foreach (var item in Orders)
 {
     <OrderListSetOnParameter OrderGuid="@item.OrderGuid"
-    FirstName="@item.Customer.FirstName"
-    LastName="@item.Customer.LastName"
-    City="@item.Customer.Address.City"
-    Street="@item.Customer.Address.Street"
-    StreetNumber="@item.Customer.Address.StreetNumber"
-    ZipCode="@item.Customer.Address.ZipCode"
-    Country="@item.Customer.Address.Country"
-    OrderDate="@item.OrderDate"
-    OrderStatus="@item.OrderStatus"
-    OrderItems="@item.OrderItems"
-    ></OrderListSetOnParameter>
-
+                             FirstName="@item.Customer.FirstName"
+                             LastName="@item.Customer.LastName"
+                             City="@item.Customer.Address.City"
+                             Street="@item.Customer.Address.Street"
+                             StreetNumber="@item.Customer.Address.StreetNumber"
+                             ZipCode="@item.Customer.Address.ZipCode"
+                             Country="@item.Customer.Address.Country"
+                             PhoneNumber="@item.Customer.PhoneNumber"
+                             Email="@item.Customer.Email"
+                             IBAN="@item.Customer.IBAN"
+                             OrderDate="@item.OrderDate"
+                             OrderStatus="@item.OrderStatus"
+                             OrderItems="@item.OrderItems">
+    </OrderListSetOnParameter>
 }
 
 @code {

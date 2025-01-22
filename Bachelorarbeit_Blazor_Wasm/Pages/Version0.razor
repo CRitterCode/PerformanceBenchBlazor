@@ -11,27 +11,23 @@
 
 @foreach (var item in Orders)
 {
+
     <OrderListParameter OrderGuid="@item.OrderGuid"
-    FirstName="@item.Customer.FirstName"
-    LastName="@item.Customer.LastName"
-    City="@item.Customer.Address.City"
-    Street="@item.Customer.Address.Street"
-    StreetNumber="@item.Customer.Address.StreetNumber"
-    ZipCode="@item.Customer.Address.ZipCode"
-    Country="@item.Customer.Address.Country"
-    OrderDate="@item.OrderDate"
-    OrderStatus="@item.OrderStatus"
-    OrderItems="@item.OrderItems"
-                        FirstName2="@item.Customer.FirstName"
-                        LastName2="@item.Customer.LastName"
-                        City2="@item.Customer.Address.City"
-                        Street2="@item.Customer.Address.Street"
-                        StreetNumber2="@item.Customer.Address.StreetNumber"
-                        ZipCode2="@item.Customer.Address.ZipCode"
-                        Country2="@item.Customer.Address.Country"
-                        OrderDate2="@item.OrderDate"
-                        OrderStatus2="@item.OrderStatus"
-                        OrderItems2="@item.OrderItems" />
+                        FirstName="@item.Customer.FirstName"
+                        LastName="@item.Customer.LastName"
+                        City="@item.Customer.Address.City"
+                        Street="@item.Customer.Address.Street"
+                        StreetNumber="@item.Customer.Address.StreetNumber"
+                        ZipCode="@item.Customer.Address.ZipCode"
+                        Country="@item.Customer.Address.Country"
+                        PhoneNumber="@item.Customer.PhoneNumber"
+                        Email="@item.Customer.Email"
+                        IBAN="@item.Customer.IBAN"
+                        OrderDate="@item.OrderDate"
+                        OrderStatus="@item.OrderStatus"
+                        OrderItems="@item.OrderItems">
+    </OrderListParameter>
+
 }
 
 
