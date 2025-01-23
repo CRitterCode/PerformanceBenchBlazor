@@ -9,13 +9,13 @@ using System.Runtime.CompilerServices;
 
 namespace Bachelorarbeit_Blazor_Wasm.Shared
 {
-    public class BenchmarkComponentBase : ComponentBase
+    public class BenchmarkComponent : ComponentBase
     {
 
         public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
 
         [Inject]
-        protected BenchmarkUtil BenchmarkUtil { get; set; }
+        public BenchmarkUtil BenchmarkUtil { get; set; }
 
 
         [Inject]
@@ -36,7 +36,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("#SetParam_OnInit");
+                BenchmarkUtil.SetMarker("Child_SetParam_OnInit");
             }
             base.OnInitialized();
         }
@@ -45,7 +45,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("#OnInit_OnParameter");
+                BenchmarkUtil.SetMarker("Child_OnInit_OnParameter");
             }
             base.OnParametersSet();
         }
@@ -56,13 +56,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             {
                 if (IsBenchmark)
                 {
-                    BenchmarkUtil.SetMarker("OnInit_OnAfterRender");
-                    BenchmarkUtil.ResetWatch();
-
-                    //if (Config.GetValue<bool>("SaveBenchmark"))
-                    //{
-                    //    await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
-                    //}
+                    BenchmarkUtil.SetMarker("Child_OnParam_OnAfterRender");
+                    //BenchmarkUtil.ResetWatch();
                 }
             }
             base.OnAfterRender(firstRender);

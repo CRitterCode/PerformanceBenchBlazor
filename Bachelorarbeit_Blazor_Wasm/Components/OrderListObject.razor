@@ -1,4 +1,4 @@
-﻿@inherits BenchmarkComponentBase
+﻿@inherits BenchmarkComponent
 
 <h3>OrderListObject</h3>
 
@@ -77,4 +77,13 @@
 @code {
     [Parameter]
     public Order Order { get; set; } = new();
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<Order>(nameof(Order), out var order))
+        {
+            Order = order;
+        }
+        return base.SetParametersAsync(ParameterView.Empty);
+    }
 }
