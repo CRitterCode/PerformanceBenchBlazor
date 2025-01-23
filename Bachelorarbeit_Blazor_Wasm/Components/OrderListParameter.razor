@@ -1,5 +1,6 @@
-﻿@using System.Collections.Generic
+﻿@inherits BenchmarkComponentBase
 
+<h3>OrderListParameter</h3>
 
 <div id="@OrderGuid" class="card mx-auto w-75 shadow-sm">
     <div class="card-header bg-primary text-white">
@@ -36,7 +37,7 @@
                     <th>IBAN</th>
                     <td>@IBAN</td>
                 </tr>
-                
+
             </tbody>
         </table>
 
@@ -104,14 +105,14 @@
     public OrderState OrderStatus { get; set; }
 
     [Parameter]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = string.Empty;
 
     [Parameter]
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     [Parameter]
-    public string IBAN { get; set; }
-    
+    public string IBAN { get; set; } = string.Empty;
+
 
 
     [Parameter]

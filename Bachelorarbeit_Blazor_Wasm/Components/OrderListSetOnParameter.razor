@@ -1,4 +1,5 @@
-﻿@inherits ComponentBase
+﻿
+@inherits BenchmarkComponentBase
 <h3>OrderListSetOnParameter</h3>
 
 <div id="@OrderGuid" class="card mx-auto w-75 shadow-sm">
@@ -115,7 +116,7 @@
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
-
+        this.BenchmarkUtil.StartWatch();
         foreach (var parameter in parameters)
         {
             switch (parameter.Name)
@@ -161,8 +162,7 @@
                     break;
             }
         }
-
         return base.SetParametersAsync(ParameterView.Empty);
     }
-}
+
 }

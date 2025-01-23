@@ -50,20 +50,21 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         protected void PopulateChartSumRevenueByYear()
         {
-      
+
         }
 
-        public override Task SetParametersAsync(ParameterView parameters) {
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
             BenchmarkUtil.StartWatch();
-            return base.SetParametersAsync(parameters); 
+            return base.SetParametersAsync(parameters);
         }
 
-        protected async override Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             if (IsBenchmark)
             {
                 BenchmarkUtil.SetMarker("SetParam_OnInit");
-                BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.GenerateOrders), 1000);
+                BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.GenerateOrders), 10);
                 BenchmarkUtil.InvokeWithBenchmark(this, nameof(this.PopulateChartOrderState));
                 BenchmarkUtil.SetMarker("OnInit");
             }
@@ -72,14 +73,16 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 GenerateOrders(1000);
                 PopulateChartOrderState();
             }
-
-            await base.OnInitializedAsync();
+            base.OnInitialized();
         }
 
-        protected override Task OnParametersSetAsync()
+        protected override void OnParametersSet()
         {
-            BenchmarkUtil.SetMarker("OnInit_OnParameter");
-            return base.OnParametersSetAsync();
+            if (IsBenchmark)
+            {
+                BenchmarkUtil.SetMarker("OnInit_OnParameter");
+            }
+            base.OnParametersSet();
         }
 
 
