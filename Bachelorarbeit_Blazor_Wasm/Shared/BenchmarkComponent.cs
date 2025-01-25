@@ -36,7 +36,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("Child_SetParam_OnInit");
+                BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
             }
             base.OnInitialized();
         }
@@ -45,7 +45,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("Child_OnInit_OnParameter");
+                BenchmarkUtil.SetMarker(this, "OnInit_OnParameter");
             }
             base.OnParametersSet();
         }
@@ -56,11 +56,16 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             {
                 if (IsBenchmark)
                 {
-                    BenchmarkUtil.SetMarker("Child_OnParam_OnAfterRender");
+                    BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                     //BenchmarkUtil.ResetWatch();
                 }
             }
             base.OnAfterRender(firstRender);
+        }
+
+        public override string ToString()
+        {
+            return nameof(BenchmarkComponent);
         }
     }
 }

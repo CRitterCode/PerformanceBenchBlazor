@@ -1,7 +1,7 @@
-﻿@page "/version3"
+﻿@page "/version4"
 @inherits VersionComponent
 
-<PageTitle>version3</PageTitle>
+<PageTitle>Version 4</PageTitle>
 
 <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
@@ -9,17 +9,8 @@
     </CustomGraphics>
 </MudChart>
 
-<Virtualize Items="Orders"
-            Context="order"
-            OverscanCount="2"
-            MaxItemCount="5">
-    <OrderListObject @key="order.OrderGuid"
-                     Order="order">
-    </OrderListObject>
-
+<Virtualize Items="Orders" Context="order">
+    @OrderListObjectRenderFragment.OrderCard(order)
 </Virtualize>
 
 
-@code {
-
-}

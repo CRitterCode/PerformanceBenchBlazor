@@ -21,7 +21,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             Orders = DataFaker.CreateFakeOrders(countOrders);
         }
 
-        protected void VisualizeOrderStatusSuccess()
+        protected virtual void VisualizeOrderStatusSuccess()
         {
             foreach (var order in Orders)
             {
@@ -57,11 +57,11 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("Parent_SetParam_OnInit");
+                BenchmarkUtil.SetMarker(this, "Parent_SetParam_OnInit");
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1000), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
 
-                BenchmarkUtil.SetMarker("Parent_OnInit_return");
+                BenchmarkUtil.SetMarker(this, "Parent_OnInit_return");
             }
             else
             {
@@ -75,7 +75,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker("Parent_OnInit_OnParam");
+                BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
             base.OnParametersSet();
         }
@@ -87,7 +87,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             {
                 if (IsBenchmark)
                 {
-                    BenchmarkUtil.SetMarker("Parent_OnParam_OnAfterRender");
+                    BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                     BenchmarkUtil.InvokeWithBenchmark(this, _ => VisualizeOrderStatusSuccess(), nameof(VisualizeOrderStatusSuccess));
                     //BenchmarkUtil.ResetWatch();
 
@@ -102,6 +102,11 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 }
             }
             await base.OnAfterRenderAsync(firstRender);
+        }
+
+        public override string ToString()
+        {
+            return nameof(VersionComponent);
         }
     }
 }

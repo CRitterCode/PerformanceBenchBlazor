@@ -1,14 +1,16 @@
 ﻿using Bachelorarbeit_Blazor_Wasm.Shared;
 using Microsoft.JSInterop;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 
 namespace Bachelorarbeit_Blazor_Wasm.Utils
 {
     public class BenchmarkUtil
     {
         public Guid Identifier { get; set; } = Guid.NewGuid();
-        public List<string> Results { get; set; } = new() { "ObjInstance,Identifier,MethodName,ElpasedMilliseconds\n" };
+        public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElpasedMilliseconds\n");
         public int Repeat => Config.GetValue<int>("RepeatBenchmark");
         private Stopwatch _stopwatch { get; set; } = new();
 
@@ -22,6 +24,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public void InvokeWithBenchmark(BenchmarkComponent component, Action<BenchmarkComponent> fn, string nameOfMethod, int? Repeat = null)
         {
             Repeat = Repeat ?? this.Repeat;
+
             for (int i = 0; i < Repeat; i++)
             {
                 var stopwatch = new Stopwatch();
@@ -31,8 +34,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
 
                 stopwatch.Stop();
 
-                Results.Add($"{Identifier},{nameOfMethod},{stopwatch.ElapsedMilliseconds}\n");
-                Console.WriteLine($"{nameOfMethod} - {stopwatch.ElapsedMilliseconds} ms");
+                SbResult.AppendLine($"{component},{Identifier},{nameOfMethod},{stopwatch.ElapsedMilliseconds}");
+                Console.WriteLine($"{component} - {nameOfMethod} - {stopwatch.ElapsedMilliseconds} ms");
             }
         }
 
@@ -52,12 +55,12 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
             }
         }
 
-        public void SetMarker(string marker)
+        public void SetMarker(object component, string marker)
         {
             if (_stopwatch.IsRunning)
             {
-                Results.Add($"{Identifier},{marker},{_stopwatch.ElapsedMilliseconds}\n");
-                Console.WriteLine($"{marker} - {_stopwatch.ElapsedMilliseconds} ms");
+                SbResult.AppendLine($"{component},{Identifier},{marker},{_stopwatch.ElapsedMilliseconds}");
+                Console.WriteLine($"{component} - {marker} - {_stopwatch.ElapsedMilliseconds} ms");
             }
             else
             {
@@ -67,7 +70,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
 
         public async ValueTask<object> DownloadFileAsync(IJSRuntime js, string fileName = "")
         {
-            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier, Results);
+            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier, SbResult.ToString());
         }
 
         // Geht auch ohne reflection, wenn man nur components verwendet
