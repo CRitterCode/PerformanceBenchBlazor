@@ -12,24 +12,26 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
     {
         public List<Order> Orders { get; set; } = new();
         public List<(string, double)> Data = new();
+        public static bool HasLoaded { get; set; } = false;
 
         [Inject]
         public IJSRuntime JS { get; set; }
 
-        protected void GenerateOrders(int countOrders)
+        protected virtual void GenerateOrders(int countOrders)
         {
             Orders = DataFaker.CreateFakeOrders(countOrders);
         }
 
         protected virtual void VisualizeOrderStatusSuccess()
         {
-            foreach (var order in Orders)
-            {
-                if (order.OrderStatus == OrderState.Arrived)
-                {
-                    JS.InvokeVoidAsync("updateCardHeaderColorByGuid", order.OrderGuid, "success");
-                }
-            }
+            Orders
+                .Where(o => o.OrderStatus == OrderState.Arrived)
+                .Select(o => o.OrderGuid)
+                .ToList()
+                .ForEach(guid =>
+                    JS.InvokeVoidAsync("updateCardHeaderColorByGuid", guid, "success")
+                        );
+
         }
 
         protected void PopulateChartOrderState()
@@ -39,6 +41,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             Data.Add(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
             Data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
         }
+
+
 
         protected void PopulateChartSumRevenueByYear()
         {
@@ -57,11 +61,11 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker(this, "Parent_SetParam_OnInit");
-                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1000), nameof(GenerateOrders), 1);
+                BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
+                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
 
-                BenchmarkUtil.SetMarker(this, "Parent_OnInit_return");
+                BenchmarkUtil.SetMarker(this, "OnInit_return");
             }
             else
             {
@@ -75,11 +79,10 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
+                BenchmarkUtil.SetMarker(this, "OnInit_OnParameter");
             }
             base.OnParametersSet();
         }
-
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -95,6 +98,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                     {
                         await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
                     }
+
                 }
                 else
                 {

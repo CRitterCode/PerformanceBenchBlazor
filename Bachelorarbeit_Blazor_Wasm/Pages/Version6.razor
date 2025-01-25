@@ -1,7 +1,7 @@
-﻿@page "/version4"
+﻿@page "/version6"
 @inherits VersionComponent
 
-<PageTitle>Version 4</PageTitle>
+<PageTitle>Version 6</PageTitle>
 
 <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
@@ -9,12 +9,28 @@
     </CustomGraphics>
 </MudChart>
 
-<div style="height:500px;overflow-y:scroll" @onscroll="VisualizeOrderStatusSuccess">
+<div style="height:500px;overflow-y:scroll" @onscroll="() => BenchmarkUtil.InvokeWithBenchmark(this, _ => VisualizeOrderStatusSuccess(), nameof(VisualizeOrderStatusSuccess))">
     <Virtualize Items="Orders" Context="order"
                 OverscanCount="2"
                 MaxItemCount="5">
         @OrderListObjectRenderFragment.OrderCard(order)
     </Virtualize>
 </div>
+
+@code {
+
+    protected override void VisualizeOrderStatusSuccess()
+    {
+        var arrivedOrderGuids = Orders
+        .Where(o => o.OrderStatus == OrderState.Arrived)
+        .Select(o => o.OrderGuid)
+        .ToArray();
+
+        var jsInProcess = (IJSInProcessRuntime)JS;
+
+        jsInProcess.Invoke<string>("updateCardHeadersColorByGuidsCollection", arrivedOrderGuids, "success");
+    }
+
+}
 
 
