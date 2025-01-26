@@ -45,7 +45,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker(this, "OnInit_OnParameter");
+                BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
             base.OnParametersSet();
         }
@@ -57,9 +57,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 if (IsBenchmark)
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
-                    //BenchmarkUtil.ResetWatch();
                 }
             }
+            BenchmarkUtil.SetMarker(this, "FINISH");
             base.OnAfterRender(firstRender);
         }
 

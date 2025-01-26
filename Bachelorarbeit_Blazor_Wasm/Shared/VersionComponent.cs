@@ -4,6 +4,7 @@ using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
+using MudBlazor;
 using System.Runtime.CompilerServices;
 
 namespace Bachelorarbeit_Blazor_Wasm.Shared
@@ -16,6 +17,10 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         [Inject]
         public IJSRuntime JS { get; set; }
+
+        public List<ChartSeries> Series = new List<ChartSeries>();
+
+        public string[] XAxisLabels;
 
         protected virtual void GenerateOrders(int countOrders)
         {
@@ -34,19 +39,43 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         }
 
-        protected void PopulateChartOrderState()
+        protected virtual void PopulateChartOrderState()
         {
             var finishedOrders = Orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
 
             Data.Add(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
             Data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
+
+            var topCategories = Orders.SelectMany(o => o.OrderItems)
+           .GroupBy(item => item.Item1.Category)
+           .Select(g => new { Category = g.Key, Count = g.Count() })
+           .OrderByDescending(x => x.Count)
+           .Take(5)
+           .ToList();
+
+            Series = new List<ChartSeries>
+        {
+            new ChartSeries()
+            {
+                Name = "Categories",
+                Data = topCategories.Select(c => (double)c.Count).ToArray()
+            }
+        };
+
+            XAxisLabels = topCategories.Select(c => c.Category).ToArray();
+
         }
 
 
 
-        protected void PopulateChartSumRevenueByYear()
+        protected async Task DownloadBenchmark()
         {
-
+            if (Config.GetValue<bool>("SaveBenchmark"))
+            {
+                await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
+                BenchmarkUtil.ResetWatch();
+                await JS.InvokeVoidAsync("location.reload");
+            }
         }
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -62,7 +91,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             if (IsBenchmark)
             {
                 BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
-                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1), nameof(GenerateOrders), 1);
+                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1000), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
 
                 BenchmarkUtil.SetMarker(this, "OnInit_return");
@@ -79,12 +108,12 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker(this, "OnInit_OnParameter");
+                BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
             base.OnParametersSet();
         }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
             {
@@ -92,20 +121,14 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                     BenchmarkUtil.InvokeWithBenchmark(this, _ => VisualizeOrderStatusSuccess(), nameof(VisualizeOrderStatusSuccess));
-                    //BenchmarkUtil.ResetWatch();
-
-                    if (Config.GetValue<bool>("SaveBenchmark"))
-                    {
-                        await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
-                    }
-
                 }
                 else
                 {
                     VisualizeOrderStatusSuccess();
                 }
             }
-            await base.OnAfterRenderAsync(firstRender);
+            BenchmarkUtil.SetMarker(this, "FINISH");
+            base.OnAfterRender(firstRender);
         }
 
         public override string ToString()

@@ -3,16 +3,25 @@
 
 <PageTitle>Version 5</PageTitle>
 
-<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
+<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => (double)d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @Orders.Count</text>
     </CustomGraphics>
 </MudChart>
 
+<MudChart ChartType="ChartType.Bar"
+          ChartSeries="@Series"
+          XAxisLabels="@XAxisLabels"
+          Width="100%"
+          Height="350px">
+</MudChart>
+
+<button @onclick="DownloadBenchmark">Download Benchmark</button>
+
 <div style="height:500px;overflow-y:scroll">
     <Virtualize Items="Orders" Context="order"
-    OverscanCount="2"
-    MaxItemCount="5">
+                OverscanCount="2"
+                MaxItemCount="5">
         @OrderListObjectRenderFragment.OrderCard(order)
     </Virtualize>
 </div>

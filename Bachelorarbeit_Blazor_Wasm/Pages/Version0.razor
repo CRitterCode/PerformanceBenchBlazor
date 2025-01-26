@@ -9,6 +9,15 @@
     </CustomGraphics>
 </MudChart>
 
+<MudChart ChartType="ChartType.Bar"
+          ChartSeries="@Series"
+          XAxisLabels="@XAxisLabels"
+          Width="100%"
+          Height="350px">
+</MudChart>
+
+<button @onclick="DownloadBenchmark">Download Benchmark</button>
+
 @foreach (var item in Orders)
 {
 
@@ -27,10 +36,5 @@
                         OrderStatus="@item.OrderStatus"
                         OrderItems="@item.OrderItems">
     </OrderListParameter>
-
-}
-
-
-@code {
 
 }
