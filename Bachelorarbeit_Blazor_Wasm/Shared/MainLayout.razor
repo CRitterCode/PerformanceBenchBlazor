@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+@inject IConfiguration Config
+@inject BenchmarkUtil BenchmarkUtil
+@inject NavigationManager NavigationManager
+
 <head>
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 </head>
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu OnDownloadBenchmark="DownloadBenchmark" />
     </div>
 
     <main>
@@ -17,6 +22,24 @@
         </article>
     </main>
 </div>
-<script src="SaveFile.js"></script>
-<script src="UpdateCard.js"></script>
 
+
+@code{
+
+    public async Task DownloadBenchmark()
+    {
+        if (Config.GetValue<bool>("SaveBenchmark"))
+        {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+            var segments = uri.Segments;
+            var lastSegment = "no_file_name";
+
+            lastSegment = segments?[segments.Length - 1].Trim('/') ?? "no_file_name";
+
+            await BenchmarkUtil.DownloadFileAsync(JS, lastSegment);
+            BenchmarkUtil.ResetWatch();
+            await JS.InvokeVoidAsync("location.reload");
+        }
+    }
+}

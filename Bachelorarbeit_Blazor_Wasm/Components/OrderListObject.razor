@@ -84,7 +84,8 @@
         if (parameters.TryGetValue<Order>(nameof(Order), out var order))
         {
             Order = order;
+            StateHasChanged();
         }
-        return base.SetParametersAsync(ParameterView.Empty);
+        return Task.CompletedTask;
     }
 }

@@ -1,26 +1,21 @@
 ﻿using Bachelorarbeit_Blazor_Wasm.Entities;
-using Bachelorarbeit_Blazor_Wasm.Pages;
 using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
 using MudBlazor;
-using System.Runtime.CompilerServices;
 
 namespace Bachelorarbeit_Blazor_Wasm.Shared
 {
     public class VersionComponent : BenchmarkComponent
     {
         public List<Order> Orders { get; set; } = new();
-        public List<(string, double)> Data = new();
-        public static bool HasLoaded { get; set; } = false;
+        public RenderChart RenderChart { get; set; } = new();
 
         [Inject]
         public IJSRuntime JS { get; set; }
 
-        public List<ChartSeries> Series = new List<ChartSeries>();
 
-        public string[] XAxisLabels;
+
 
         protected virtual void GenerateOrders(int countOrders)
         {
@@ -43,39 +38,18 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             var finishedOrders = Orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
 
-            Data.Add(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
-            Data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
+            RenderChart.AddPiedData(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
+            RenderChart.AddPiedData(($"Finished orders ({finishedOrders})", finishedOrders));
 
             var topCategories = Orders.SelectMany(o => o.OrderItems)
            .GroupBy(item => item.Item1.Category)
-           .Select(g => new { Category = g.Key, Count = g.Count() })
-           .OrderByDescending(x => x.Count)
+           .Select(g => new { Category = g.Key, valCount = g.Count() })
+           .OrderByDescending(x => x.valCount)
            .Take(5)
            .ToList();
 
-            Series = new List<ChartSeries>
-        {
-            new ChartSeries()
-            {
-                Name = "Categories",
-                Data = topCategories.Select(c => (double)c.Count).ToArray()
-            }
-        };
-
-            XAxisLabels = topCategories.Select(c => c.Category).ToArray();
-
-        }
-
-
-
-        protected async Task DownloadBenchmark()
-        {
-            if (Config.GetValue<bool>("SaveBenchmark"))
-            {
-                await BenchmarkUtil.DownloadFileAsync(JS, this.GetType().Name);
-                BenchmarkUtil.ResetWatch();
-                await JS.InvokeVoidAsync("location.reload");
-            }
+            RenderChart.AddLineData(("Categories", topCategories.Select(c => (double)c.valCount).ToArray()), 
+                                    topCategories.Select(c => c.Category).ToArray());
         }
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -88,17 +62,17 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         //BenchmarkUtil.InvokeWithBenchmarkReflection(this, nameof(this.PopulateChartOrderState));
         protected override void OnInitialized()
         {
+            var cOrder = Config.GetValue<int>("CountOrders");
+
             if (IsBenchmark)
             {
                 BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
-                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(1000), nameof(GenerateOrders), 1);
+                BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(cOrder), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
-
-                BenchmarkUtil.SetMarker(this, "OnInit_return");
             }
             else
             {
-                GenerateOrders(10);
+                GenerateOrders(cOrder);
                 PopulateChartOrderState();
             }
             base.OnInitialized();

@@ -1,0 +1,179 @@
+﻿@page "/version_"
+@inherits VersionComponent
+
+@using PSC.Blazor.Components.Chartjs
+@using PSC.Blazor.Components.Chartjs.Models
+@using PSC.Blazor.Components.Chartjs.Models.Common
+@using PSC.Blazor.Components.Chartjs.Models.Pie
+@using PSC.Blazor.Components.Chartjs.Models.Bar
+@using PSC.Blazor.Components.Chartjs.Models.Line
+
+<PageTitle>Version 6</PageTitle>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <Chart Config="orderStatusConfig"></Chart>
+    </div>
+    <div class="col-md-6">
+        <Chart Config="categoryDistributionConfig"></Chart>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <Chart Config="orderTrendConfig"></Chart>
+    </div>
+    <div class="col-md-6">
+        <Chart Config="topCustomersConfig"></Chart>
+    </div>
+</div>
+
+
+@* <MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
+    <CustomGraphics>
+        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @Orders.Count</text>
+    </CustomGraphics>
+</MudChart> *@
+
+<div style="height:500px;overflow-y:scroll">
+    <Virtualize Items="Orders" Context="order"
+                OverscanCount="2"
+                MaxItemCount="5">
+        @OrderListObjectRenderFragment.OrderCard(order)
+    </Virtualize>
+</div>
+
+@code {
+
+    private PieChartConfig _config;
+
+
+    private PieChartConfig orderStatusConfig;
+    private BarChartConfig categoryDistributionConfig;
+    private LineChartConfig orderTrendConfig;
+    private BarChartConfig topCustomersConfig;
+
+    protected override void PopulateChartOrderState()
+    {
+        CreateOrderStatusChart();
+        CreateCategoryDistributionChart();
+        CreateOrderTrendChart();
+        CreateTopCustomersChart();
+    }
+
+    private void CreateOrderStatusChart()
+    {
+        var finishedOrders = Orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
+        var unfinishedOrders = Orders.Count - finishedOrders;
+
+        Data.Clear();
+        Data.Add(($"Unfinished orders ({unfinishedOrders})", unfinishedOrders));
+        Data.Add(($"Finished orders ({finishedOrders})", finishedOrders));
+
+        orderStatusConfig = new PieChartConfig
+            {
+                Data = new PieData
+                {
+                    Labels = Data.Select(d => d.Item1).ToList(),
+                    Datasets = new List<PieDataset>
+                {
+                    new PieDataset
+                    {
+                        Data = Data.Select(d => (decimal?)d.Item2).ToList(),
+                        BackgroundColor = new List<string> { "#FF6384", "#36A2EB" }
+                    }
+                }
+                }
+            };
+    }
+
+    private void CreateCategoryDistributionChart()
+    {
+        var categoryDistribution = Orders
+            .SelectMany(o => o.OrderItems)
+            .GroupBy(item => item.Item1.Category)
+            .Select(g => new { Category = g.Key, Count = g.Count() })
+            .OrderByDescending(x => x.Count)
+            .Take(5)
+            .ToList();
+
+        categoryDistributionConfig = new BarChartConfig
+            {
+                Data = new BarData
+                {
+                    Labels = categoryDistribution.Select(x => x.Category).ToList(),
+                    Datasets = new List<BarDataset>
+                {
+                    new BarDataset
+                    {
+                        Label = "Anzahl Bestellungen",
+                        Data = categoryDistribution.Select(x => (decimal?)x.Count).ToList(),
+                        BackgroundColor = new List<string> { "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF" }
+                    }
+                }
+                }
+            };
+    }
+
+    private void CreateOrderTrendChart()
+    {
+        var orderTrend = Orders
+            .GroupBy(o => o.OrderDate.Date)
+            .Select(g => new { Date = g.Key, Count = g.Count() })
+            .OrderBy(x => x.Date)
+            .Take(30) // Last 30 days
+            .ToList();
+
+        orderTrendConfig = new LineChartConfig
+            {
+                Data = new LineData
+                {
+                    Labels = orderTrend.Select(x => x.Date.ToShortDateString()).ToList(),
+                    Datasets = new List<LineDataset>
+                {
+                    new LineDataset
+                    {
+                        Label = "Anzahl Bestellungen",
+                        Data = orderTrend.Select(x => (decimal?)x.Count).ToList(),
+                        BorderColor = "#4BC0C0",
+                        Fill = false
+                    }
+                }
+                }
+            };
+    }
+
+    private void CreateTopCustomersChart()
+    {
+        var topCustomers = Orders
+            .GroupBy(o => o.Customer.Email)
+            .Select(g => new { Email = g.Key, OrderCount = g.Count() })
+            .OrderByDescending(x => x.OrderCount)
+            .Take(5)
+            .ToList();
+
+        topCustomersConfig = new BarChartConfig
+            {
+                Data = new BarData
+                {
+                    Labels = topCustomers.Select(x => x.Email).ToList(),
+                    Datasets = new List<BarDataset>
+                {
+                    new BarDataset
+                    {
+                        Label = "Anzahl Bestellungen",
+                        Data = topCustomers.Select(x => (decimal?)x.OrderCount).ToList(),
+                        BackgroundColor = new List<string> { "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF" }
+                    }
+                }
+                }
+            };
+    }
+}
+
+
+
+
+}
+
+

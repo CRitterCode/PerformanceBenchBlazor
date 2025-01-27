@@ -10,7 +10,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
     public class BenchmarkUtil
     {
         public Guid Identifier { get; set; } = Guid.NewGuid();
-        public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElpasedMilliseconds\n");
+        public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
         public int Repeat => Config.GetValue<int>("RepeatBenchmark");
         private Stopwatch _stopwatch { get; set; } = new();
 

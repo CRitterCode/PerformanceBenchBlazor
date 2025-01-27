@@ -160,9 +160,14 @@
                 case nameof(IBAN):
                     IBAN = (string)parameter.Value;
                     break;
+                case nameof(OrderItems):
+                    OrderItems = (List<(StockItem Item, int Quantity)>)parameter.Value;
+                    break;
             }
         }
-        return base.SetParametersAsync(ParameterView.Empty);
+
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
 }

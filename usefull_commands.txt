@@ -1,0 +1,7 @@
+dotnet publish --configuration Release --output ./publish
+
+dotnet serve --directory ./publish --port 5000
+dotnet tool install --global dotnet-serve
+
+cd zum publish ordner
+python -m http.server 5000

@@ -1,26 +1,26 @@
 ﻿@page "/version1"
 @inherits VersionComponent
 
-<h3>Version1</h3>
+<PageTitle>version1</PageTitle>
 
-<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@Data.Select(d => (double)d.Item2).ToArray()" InputLabels="Data.Select(l => l.Item1).ToArray()">
+<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@RenderChart.PieData.Select(d => d.Item2).ToArray()" InputLabels="RenderChart.PieData.Select(l => l.Item1).ToArray()">
     <CustomGraphics>
         <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @Orders.Count</text>
     </CustomGraphics>
 </MudChart>
 
 <MudChart ChartType="ChartType.Bar"
-          ChartSeries="@Series"
-          XAxisLabels="@XAxisLabels"
+          ChartSeries="@RenderChart.LineSeries"
+          XAxisLabels="@RenderChart.LineXAxisLabels"
           Width="100%"
           Height="350px">
 </MudChart>
 
-<button @onclick="DownloadBenchmark">Download Benchmark</button>
-
 @foreach (var item in Orders)
 {
-    <OrderListSetOnParameter OrderGuid="@item.OrderGuid"
+    <OrderListSetOnParameter 
+        @key="item.OrderGuid"
+        OrderGuid="@item.OrderGuid"
                              FirstName="@item.Customer.FirstName"
                              LastName="@item.Customer.LastName"
                              City="@item.Customer.Address.City"
