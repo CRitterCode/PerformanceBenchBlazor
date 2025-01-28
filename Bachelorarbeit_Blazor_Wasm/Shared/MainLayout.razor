@@ -39,7 +39,7 @@
 
             await BenchmarkUtil.DownloadFileAsync(JS, lastSegment);
             BenchmarkUtil.ResetWatch();
-            await JS.InvokeVoidAsync("location.reload");
+            NavigationManager.NavigateTo("/", forceLoad: true);
         }
     }
 }

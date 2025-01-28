@@ -48,7 +48,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
            .Take(5)
            .ToList();
 
-            RenderChart.AddLineData(("Categories", topCategories.Select(c => (double)c.valCount).ToArray()), 
+            RenderChart.AddLineData(("Categories", topCategories.Select(c => (double)c.valCount).ToArray()),
                                     topCategories.Select(c => c.Category).ToArray());
         }
 
@@ -100,8 +100,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 {
                     VisualizeOrderStatusSuccess();
                 }
+                BenchmarkUtil.SetMarker(this, "FINISH");
             }
-            BenchmarkUtil.SetMarker(this, "FINISH");
             base.OnAfterRender(firstRender);
         }
 

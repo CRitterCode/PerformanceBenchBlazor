@@ -58,8 +58,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                 }
+                BenchmarkUtil.SetMarker(this, "FINISH");
             }
-            BenchmarkUtil.SetMarker(this, "FINISH");
             base.OnAfterRender(firstRender);
         }
 

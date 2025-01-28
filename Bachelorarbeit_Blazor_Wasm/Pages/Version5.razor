@@ -20,7 +20,7 @@
 <div style="height:500px;overflow-y:scroll">
     <Virtualize Items="Orders" Context="order"
                 OverscanCount="2"
-                MaxItemCount="5">
+                MaxItemCount="3">
         @OrderListObjectRenderFragment.OrderCard(order)
     </Virtualize>
 </div>
@@ -34,7 +34,8 @@
         .Select(o => o.OrderGuid)
         .ToArray();
 
-        JS.InvokeVoidAsync("updateCardHeadersColorByGuidsCollection", arrivedOrderGuids, "success");
+        var jsInProcess = (IJSInProcessRuntime)JS;
+        jsInProcess.Invoke<string>("updateCardHeadersColorByGuidsCollection", arrivedOrderGuids, "success");
     }
 
 }

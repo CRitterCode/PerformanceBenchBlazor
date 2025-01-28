@@ -27,23 +27,40 @@
 
 	<!--<ItemGroup>
 		<BlazorWebAssemblyLazyLoadAssembly Include="MyLibrary.dll" />
-	</ItemGroup>
+	</ItemGroup>-->
 
-	<PropertyGroup>
-		<PublishTrimmed>true</PublishTrimmed>
-		<TrimMode>link</TrimMode>
-	</PropertyGroup>
+	<!--ist standard auf true-->
+	<!--<PropertyGroup>
+		<WasmEnableWebcil>false</WasmEnableWebcil>
+	</PropertyGroup>-->
 
-	<PropertyGroup>
+	<!--<PropertyGroup>
 		<BlazorWebAssemblyEnableLinker>true</BlazorWebAssemblyEnableLinker>
-	</PropertyGroup>
+	</PropertyGroup>-->
+	
+	<!--nur für self-contained, also plattformaabhängig-->
+	<!--<PropertyGroup>
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>-->
 
+	<!--default ist full...-->
+	<!--<ItemGroup>
+		<TrimMode>full</TrimMode>
+	</ItemGroup>-->
+
+
+	<!--https://learn.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/webassembly?view=aspnetcore-9.0-->
+	<PropertyGroup>
+		<CompressionEnabled>true</CompressionEnabled>
+	</PropertyGroup>
+	
 	<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
+		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<InvariantGlobalization>true</InvariantGlobalization>
-	</PropertyGroup>-->
+	</PropertyGroup>
 
 </Project>
