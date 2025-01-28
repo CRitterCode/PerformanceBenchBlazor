@@ -6,7 +6,7 @@
         public Customer Customer { get; init; } = new();
 
         public DateTimeOffset OrderDate { get; init; } = DateTimeOffset.UtcNow;
-        public OrderState OrderStatus { get; set; }
+        public OrderState OrderStatus { get; set; } = OrderState.Pending;
         public List<(StockItem Item, int Quantity)> OrderItems { get; set; } = [];
     }
 }

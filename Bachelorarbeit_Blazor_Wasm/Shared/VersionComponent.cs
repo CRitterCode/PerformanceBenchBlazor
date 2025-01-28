@@ -52,21 +52,13 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                                     topCategories.Select(c => c.Category).ToArray());
         }
 
-        public override Task SetParametersAsync(ParameterView parameters)
-        {
-            BenchmarkUtil.StartWatch();
-            return base.SetParametersAsync(parameters);
-        }
-
-        //falls reflection wieder nötig...
-        //BenchmarkUtil.InvokeWithBenchmarkReflection(this, nameof(this.PopulateChartOrderState));
         protected override void OnInitialized()
         {
+            base.OnInitialized();
             var cOrder = Config.GetValue<int>("CountOrders");
-
             if (IsBenchmark)
             {
-                BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
+                //BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(cOrder), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
             }
@@ -84,7 +76,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             {
                 BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
-            base.OnParametersSet();
         }
 
         protected override void OnAfterRender(bool firstRender)
@@ -102,7 +93,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 }
                 BenchmarkUtil.SetMarker(this, "FINISH");
             }
-            base.OnAfterRender(firstRender);
         }
 
         public override string ToString()

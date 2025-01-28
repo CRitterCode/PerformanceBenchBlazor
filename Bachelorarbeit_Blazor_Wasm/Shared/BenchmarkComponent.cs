@@ -13,6 +13,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
     {
 
         public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
+        protected bool HasFirstSet { get; set; } = false;
 
         [Inject]
         public BenchmarkUtil BenchmarkUtil { get; set; }
@@ -34,11 +35,11 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         protected override void OnInitialized()
         {
-            if (IsBenchmark)
+            if (IsBenchmark && (HasFirstSet || this is not VersionComponent))
             {
                 BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
             }
-            base.OnInitialized();
+            HasFirstSet = true;
         }
 
         protected override void OnParametersSet()
@@ -47,7 +48,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             {
                 BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
-            base.OnParametersSet();
         }
 
         protected override void OnAfterRender(bool firstRender)
@@ -60,8 +60,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 }
                 BenchmarkUtil.SetMarker(this, "FINISH");
             }
-            base.OnAfterRender(firstRender);
         }
+
+        protected override bool ShouldRender() => false;
 
         public override string ToString()
         {
