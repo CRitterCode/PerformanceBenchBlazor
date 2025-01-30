@@ -12,12 +12,14 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.1" />
+    <PackageReference Include="Chart.js" Version="3.7.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.1" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
+    <PackageReference Include="PSC.Blazor.Components.Chartjs" Version="8.0.8" />
 
   </ItemGroup>
 
@@ -49,6 +51,7 @@
 	</ItemGroup>-->
 
 
+	<!--MIT AOT-->
 	<!--https://learn.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/webassembly?view=aspnetcore-9.0-->
 	<PropertyGroup>
 		<CompressionEnabled>true</CompressionEnabled>
@@ -56,11 +59,22 @@
 	
 	<PropertyGroup>
 		<RunAOTCompilation>true</RunAOTCompilation>
+		<PublishTrimmed>true</PublishTrimmed>
 		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
+
+	<!--OHNE AOT-->
+	<!--<PropertyGroup>
+		<WasmEnableSIMD>true</WasmEnableSIMD>
+	</PropertyGroup>-->
+
+	<!--<PropertyGroup>
+			<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>-->
+
 
 </Project>

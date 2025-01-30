@@ -1,46 +1,35 @@
-﻿@page "/Version6"
+﻿@page "/version6"
 @inherits VersionComponent
+
+@using PSC.Blazor.Components.Chartjs
+@using PSC.Blazor.Components.Chartjs.Models
+@using PSC.Blazor.Components.Chartjs.Models.Common
+@using PSC.Blazor.Components.Chartjs.Models.Pie
+@using PSC.Blazor.Components.Chartjs.Models.Bar
+@using PSC.Blazor.Components.Chartjs.Models.Line
 
 <PageTitle>Version 6</PageTitle>
 
-<MudChart ChartType="ChartType.Donut" Width="300px" Height="300px" InputData="@RenderChart.PieData.Select(d => d.Item2).ToArray()" InputLabels="RenderChart.PieData.Select(l => l.Item1).ToArray()">
-    <CustomGraphics>
-        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="Helvetica" font-size="4">Total: @Orders.Count</text>
-    </CustomGraphics>
-</MudChart>
 
-<MudChart ChartType="ChartType.Bar"
-          ChartSeries="@RenderChart.LineSeries"
-          XAxisLabels="@RenderChart.LineXAxisLabels"
-          Width="100%"
-          Height="350px">
-</MudChart>
+<div class="row">
+    <div class="col-md-6">
+        <Chart Config="RenderChart.PieChartConfig"></Chart>
+    </div>
+        <div class="col-md-6">
+        <Chart Config="RenderChart.BarChartConfig"></Chart>
+    </div>
+</div>
 
 
 <div style="height:500px;overflow-y:scroll">
     <Virtualize Items="Orders" Context="order"
-                OverscanCount="2"
-                MaxItemCount="5">
-
-        <OrderListObject @key="order.OrderGuid"
-                         Order="order">
-        </OrderListObject>
-
-
+    OverscanCount="2"
+    MaxItemCount="5">
+        @OrderListObjectRenderFragment.OrderCard(order)
     </Virtualize>
 </div>
 
 @code {
-
-    protected override void VisualizeOrderStatusSuccess()
-    {
-        var arrivedOrderGuids = Orders
-        .Where(o => o.OrderStatus == OrderState.Arrived)
-        .Select(o => o.OrderGuid)
-        .ToArray();
-
-        JS.InvokeVoidAsync("updateCardHeadersColorByGuidsCollection", arrivedOrderGuids, "success");
-    }
 
 }
 

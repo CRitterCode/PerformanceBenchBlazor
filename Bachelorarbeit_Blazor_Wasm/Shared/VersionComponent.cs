@@ -37,19 +37,23 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         protected virtual void PopulateChartOrderState()
         {
             var finishedOrders = Orders.Where(o => o.OrderStatus.HasFlag(OrderState.Arrived)).Count();
+            var unfinishedOrders = Orders.Count - finishedOrders;
 
-            RenderChart.AddPiedData(($"Unfinished orders ({Orders.Count - finishedOrders})", Orders.Count - finishedOrders));
-            RenderChart.AddPiedData(($"Finished orders ({finishedOrders})", finishedOrders));
+            RenderChart.AddPieData($"Unfinished orders ({unfinishedOrders})", unfinishedOrders);
+            RenderChart.AddPieData($"Finished orders ({finishedOrders})", finishedOrders);
 
-            var topCategories = Orders.SelectMany(o => o.OrderItems)
-           .GroupBy(item => item.Item1.Category)
-           .Select(g => new { Category = g.Key, valCount = g.Count() })
-           .OrderByDescending(x => x.valCount)
-           .Take(5)
-           .ToList();
+            var categoryDistribution = Orders
+                            .SelectMany(o => o.OrderItems)
+                            .GroupBy(item => item.Item1.Category)
+                            .Select(g => new { Category = g.Key, Count = g.Count() })
+                            .OrderByDescending(x => x.Count)
+                            .Take(5)
+                            .ToList();
 
-            RenderChart.AddLineData(("Categories", topCategories.Select(c => (double)c.valCount).ToArray()),
-                                    topCategories.Select(c => c.Category).ToArray());
+            foreach (var item in categoryDistribution)
+            {
+                RenderChart.AddBarData(item.Category, item.Count);
+            }
         }
 
         protected override void OnInitialized()

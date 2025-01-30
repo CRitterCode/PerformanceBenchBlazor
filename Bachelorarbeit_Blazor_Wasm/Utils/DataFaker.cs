@@ -7,6 +7,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
     {
         public static List<Order> CreateFakeOrders(int numberOfOrders)
         {
+            Randomizer.Seed = new Random(8675309);
             var bogusFaker = new Faker();            
             var orders = new List<Order>();
 
