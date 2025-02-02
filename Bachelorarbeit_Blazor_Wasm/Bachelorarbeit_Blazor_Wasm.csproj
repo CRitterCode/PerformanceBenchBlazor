@@ -27,32 +27,17 @@
     <ProjectReference Include="..\UI\UI.csproj" />
   </ItemGroup>
 
-	<!--<ItemGroup>
-		<BlazorWebAssemblyLazyLoadAssembly Include="MyLibrary.dll" />
-	</ItemGroup>-->
-
-	<!--ist standard auf true-->
-	<!--<PropertyGroup>
-		<WasmEnableWebcil>false</WasmEnableWebcil>
-	</PropertyGroup>-->
-
-	<!--<PropertyGroup>
-		<BlazorWebAssemblyEnableLinker>true</BlazorWebAssemblyEnableLinker>
-	</PropertyGroup>-->
+	<!--OHNE AOT-->
 	
-	<!--nur für self-contained, also plattformaabhängig-->
-	<!--<PropertyGroup>
-		<PublishTrimmed>true</PublishTrimmed>
-	</PropertyGroup>-->
+	<PropertyGroup>
+		<WasmEnableSIMD>true</WasmEnableSIMD>
+	</PropertyGroup>
 
-	<!--default ist full...-->
-	<!--<ItemGroup>
-		<TrimMode>full</TrimMode>
-	</ItemGroup>-->
+	<PropertyGroup>
+			<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
 
 
-	<!--MIT AOT-->
-	<!--https://learn.microsoft.com/en-us/aspnet/core/blazor/host-and-deploy/webassembly?view=aspnetcore-9.0-->
 	<PropertyGroup>
 		<CompressionEnabled>true</CompressionEnabled>
 	</PropertyGroup>
@@ -66,15 +51,5 @@
 	<PropertyGroup>
 		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
-
-	<!--OHNE AOT-->
-	<!--<PropertyGroup>
-		<WasmEnableSIMD>true</WasmEnableSIMD>
-	</PropertyGroup>-->
-
-	<!--<PropertyGroup>
-			<PublishTrimmed>true</PublishTrimmed>
-	</PropertyGroup>-->
-
-
+	
 </Project>

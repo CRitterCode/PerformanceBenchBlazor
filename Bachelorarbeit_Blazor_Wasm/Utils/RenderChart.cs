@@ -1,8 +1,6 @@
-﻿using MudBlazor;
+﻿
 using PSC.Blazor.Components.Chartjs.Models.Bar;
 using PSC.Blazor.Components.Chartjs.Models.Pie;
-using System;
-using System.Reflection.Emit;
 
 namespace Bachelorarbeit_Blazor_Wasm.Utils
 {

@@ -1,0 +1,43 @@
+@startuml
+
+class BenchmarkUtil {
+    - Identifier: Guid
+    - SbResult: StringBuilder
+    - Repeat: int
+    - _stopwatch: Stopwatch
+    - Config: IConfiguration
+    + BenchmarkUtil(IConfiguration config)
+    + InvokeWithBenchmark(component BenchmarkComponent, 
+      fn: Action<BenchmarkComponent> , nameOfMethod: string ,Repeat: int?): void
+    + StartWatch(): void
+    + ResetWatch(): void
+    + SetMarker(component: object, marker: string): void
+    + DownloadFileAsync(js: IJSRuntime , fileName: string): ValueTask<object>
+}
+
+class BenchmarkComponent {
+    - HasFirstSet: bool
+    + IsBenchmark: bool
+    + BenchmarkUtil: BenchmarkUtil
+    + Config: IConfiguration
+}
+
+class VersionComponent {
+    - Orders: List<Order>
+    - RenderChart: RenderChart
+    + JS: IJSRuntime
+    + GenerateOrders(countOrders: int): void
+    + VisualizeOrderStatusSuccess(): void
+    + PopulateChartOrderState(): void
+}
+
+BenchmarkUtil --> IConfiguration
+BenchmarkUtil --> Stopwatch
+BenchmarkUtil ..> IJSRuntime
+BenchmarkComponent --> BenchmarkUtil
+BenchmarkComponent <|-- VersionComponent
+VersionComponent *--> Order
+VersionComponent --> RenderChart
+VersionComponent --> IJSRuntime
+
+@enduml

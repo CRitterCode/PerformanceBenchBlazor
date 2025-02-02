@@ -2,29 +2,29 @@
 
 @code {
 
-    public static RenderFragment<Order> OrderCard => (Order) => __builder =>
-     {
+    public static RenderFragment<Order> OrderCard => (order) => 
+    @<div>
          <h3>OrderListObjectRenderFragment</h3>
-         <div id="@Order.OrderGuid" class="card mx-auto w-75 shadow-sm">
+         <div id="@order.OrderGuid" class="card mx-auto w-75 shadow-sm">
              <div class="card-header bg-primary text-white">
-                 <h3 class="card-title mb-0">Order @Order.OrderGuid</h3>
+                 <h3 class="card-title mb-0">Order @order.OrderGuid</h3>
              </div>
              <div class="card-body">
                  <table class="table table-striped">
                      <tbody>
-                         <tr><th>Customer</th><td>@Order.Customer.FirstName @Order.Customer.LastName</td></tr>
+                         <tr><th>Customer</th><td>@order.Customer.FirstName @order.Customer.LastName</td></tr>
                          <tr>
                              <th>Address</th>
                              <td>
-                                 @Order.Customer.Address.Street @Order.Customer.Address.StreetNumber,
-                                 @Order.Customer.Address.City, @Order.Customer.Address.ZipCode, @Order.Customer.Address.Country
+                                 @order.Customer.Address.Street @order.Customer.Address.StreetNumber,
+                                 @order.Customer.Address.City, @order.Customer.Address.ZipCode, @order.Customer.Address.Country
                              </td>
                          </tr>
-                         <tr><th>Order Date</th><td>@Order.OrderDate.ToString("dd. MM. yyyy")</td></tr>
-                         <tr><th>Status</th><td>@Order.OrderStatus</td></tr>
-                         <tr><th>PhoneNumber</th><td>@Order.Customer.PhoneNumber</td></tr>
-                         <tr><th>Email</th><td>@Order.Customer.Email</td></tr>
-                         <tr><th>IBAN</th><td>@Order.Customer.IBAN</td></tr>
+                         <tr><th>Order Date</th><td>@order.OrderDate.ToString("dd. MM. yyyy")</td></tr>
+                         <tr><th>Status</th><td>@order.OrderStatus</td></tr>
+                         <tr><th>PhoneNumber</th><td>@order.Customer.PhoneNumber</td></tr>
+                         <tr><th>Email</th><td>@order.Customer.Email</td></tr>
+                         <tr><th>IBAN</th><td>@order.Customer.IBAN</td></tr>
                      </tbody>
                  </table>
 
@@ -42,7 +42,7 @@
                          </tr>
                      </thead>
                      <tbody>
-                         @foreach (var item in Order.OrderItems)
+                         @foreach (var item in order.OrderItems)
                          {
                              <tr>
                                  <td>@item.Item.Name</td>
@@ -58,6 +58,6 @@
                  </table>
              </div>
          </div>
-     };
+    </div>;
 
 }
