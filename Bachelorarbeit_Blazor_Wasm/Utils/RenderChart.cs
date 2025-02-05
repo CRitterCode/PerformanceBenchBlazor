@@ -39,7 +39,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
                     new BarDataset()
                     {
                         Label = "",
-                        Data = new List<decimal?>()
+                        Data = new List<decimal?>(),
+                        BackgroundColor= new List<string>()
                     }
                 }
             };

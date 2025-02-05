@@ -15,7 +15,8 @@
 
 @foreach (var item in Orders)
 {
-    <OrderListParameter OrderGuid="@item.OrderGuid"
+    <OrderListParameter 
+                        OrderGuid="@item.OrderGuid"
                         FirstName="@item.Customer.FirstName"
                         LastName="@item.Customer.LastName"
                         City="@item.Customer.Address.City"
@@ -32,3 +33,4 @@
     </OrderListParameter>
 
 }
+

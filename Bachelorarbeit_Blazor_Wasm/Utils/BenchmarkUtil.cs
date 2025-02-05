@@ -11,7 +11,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
     {
         public Guid Identifier { get; set; } = Guid.NewGuid();
         public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
-        public int Repeat => Config.GetValue<int>("RepeatBenchmark");
+        private int _repeat => Config.GetValue<int>("RepeatBenchmark");
         private Stopwatch _stopwatch { get; set; } = new();
 
         public IConfiguration Config { get; set; }
@@ -23,7 +23,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
 
         public void InvokeWithBenchmark(BenchmarkComponent component, Action<BenchmarkComponent> fn, string nameOfMethod, int? Repeat = null)
         {
-            Repeat = Repeat ?? this.Repeat;
+            Repeat = Repeat ?? this._repeat;
 
             for (int i = 0; i < Repeat; i++)
             {
@@ -70,38 +70,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
 
         public async ValueTask<object> DownloadFileAsync(IJSRuntime js, string fileName = "")
         {
-            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier, SbResult.ToString());
+            var cOrders = Config.GetValue<int>("CountOrders");
+            var isAOT = Config.GetValue<bool>("AOT");
+            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier + "_" + cOrders + "_" + _repeat + "_" + isAOT, SbResult.ToString());
         }
-
-        // Geht auch ohne reflection, wenn man nur components verwendet
-        //public List<string> InvokeWithBenchmarkReflection(object objInstance, string methodName, params object[] param)
-        //{
-        //    if (objInstance != null)
-        //    {
-        //        var methodInfo = objInstance.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-        //        if (methodInfo != null)
-        //        {
-
-        //            for (int i = 0; i < Repeat; i++)
-        //            {
-        //                var stopwatch = new Stopwatch();
-        //                stopwatch.Start();
-
-        //                methodInfo.Invoke(objInstance, param);
-
-        //                stopwatch.Restart();
-
-        //                Results.Add($"{Identifier},{methodName},{stopwatch.ElapsedMilliseconds}\n"); //{objInstance.GetType().Name}
-        //                Console.WriteLine($"{methodName} - {stopwatch.ElapsedMilliseconds} ms");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Methode nicht gefunden - {methodName}");
-        //        }
-        //    }
-        //    return Results;
-        //}
     }
 }

@@ -2,7 +2,6 @@
 using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace Bachelorarbeit_Blazor_Wasm.Shared
 {
@@ -62,7 +61,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             var cOrder = Config.GetValue<int>("CountOrders");
             if (IsBenchmark)
             {
-                //BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(cOrder), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
             }

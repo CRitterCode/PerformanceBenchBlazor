@@ -4,6 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;AOT;NOAOT</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,29 +28,23 @@
     <ProjectReference Include="..\UI\UI.csproj" />
   </ItemGroup>
 
-	<!--OHNE AOT-->
 	
-	<PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'NOAOT'">
 		<WasmEnableSIMD>true</WasmEnableSIMD>
-	</PropertyGroup>
-
-	<PropertyGroup>
-			<PublishTrimmed>true</PublishTrimmed>
-	</PropertyGroup>
-
-
-	<PropertyGroup>
-		<CompressionEnabled>true</CompressionEnabled>
-	</PropertyGroup>
-	
-	<PropertyGroup>
-		<RunAOTCompilation>true</RunAOTCompilation>
 		<PublishTrimmed>true</PublishTrimmed>
-		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
-	</PropertyGroup>
-
-	<PropertyGroup>
+		<CompressionEnabled>true</CompressionEnabled>
 		<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="'$(Configuration)' == 'AOT'">
+		<RunAOTCompilation>true</RunAOTCompilation>
+		<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
+		
+		<WasmEnableSIMD>true</WasmEnableSIMD>
+		<PublishTrimmed>true</PublishTrimmed>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<CompressionEnabled>true</CompressionEnabled>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
+		
 </Project>
