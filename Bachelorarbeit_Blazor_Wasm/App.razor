@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@inject BenchmarkUtil BenchmarkUtil
+
+<Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="@OnNavigateAsync">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +12,12 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    private Task OnNavigateAsync(NavigationContext args)
+    {
+        BenchmarkUtil.ResetBenchmark();
+        Console.WriteLine(BenchmarkUtil.Stopwatch.ElapsedMilliseconds);
+        return Task.CompletedTask;
+    }
+}

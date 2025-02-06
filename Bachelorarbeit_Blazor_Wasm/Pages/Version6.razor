@@ -12,22 +12,27 @@
 
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 col-lg-4">
         <Chart Config="RenderChart.PieChartConfig"></Chart>
     </div>
-        <div class="col-md-6">
+    <div class="col-md-6 col-lg-4">
         <Chart Config="RenderChart.BarChartConfig"></Chart>
     </div>
 </div>
 
 
 <div style="height:500px;overflow-y:scroll">
-    <Virtualize Items="Orders" Context="order"
-    OverscanCount="1"
-    MaxItemCount="5">
-        @OrderListObjectRenderFragment.OrderCard(order)
+    <Virtualize Items="Orders"
+                Context="order"
+                OverscanCount="1"
+                MaxItemCount="10">
+        <OrderListObject @key="order.OrderGuid"
+                         Order="order">
+        </OrderListObject>
+
     </Virtualize>
 </div>
+
 
 @code {
 

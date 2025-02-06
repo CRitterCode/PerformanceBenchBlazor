@@ -12,9 +12,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
     public class BenchmarkComponent : ComponentBase
     {
 
-        public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
-        protected bool HasFirstSet { get; set; } = false;
-
         [Inject]
         public BenchmarkUtil BenchmarkUtil { get; set; }
 
@@ -26,39 +23,43 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
-            if (IsBenchmark)
+            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
             {
-                BenchmarkUtil.StartWatch();
+                BenchmarkUtil.SetMarker(this, "SetParam");
             }
             return base.SetParametersAsync(parameters);
         }
 
         protected override void OnInitialized()
         {
-            if (IsBenchmark && (HasFirstSet || this is not VersionComponent))
+            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
             {
                 BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
             }
-            HasFirstSet = true;
         }
 
         protected override void OnParametersSet()
         {
-            if (IsBenchmark)
+            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
             {
                 BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
+            BenchmarkUtil.ChildStartToFinCounter.counter++;
+
         }
 
         protected override void OnAfterRender(bool firstRender)
         {
             if (firstRender)
             {
-                if (IsBenchmark)
+                BenchmarkUtil.ChildStartToFinCounter.counter++;
+                if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == BenchmarkUtil.ChildStartToFinCounter.countOrder * 2)
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
+                    BenchmarkUtil.SetMarker(this, "FINISH");
+                    BenchmarkUtil.ChildStartToFinCounter.counter = 0;
+                    BenchmarkUtil.Stopwatch.Reset();
                 }
-                BenchmarkUtil.SetMarker(this, "FINISH");
             }
         }
 

@@ -116,7 +116,6 @@
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
-        this.BenchmarkUtil.StartWatch();
         foreach (var parameter in parameters)
         {
             switch (parameter.Name)

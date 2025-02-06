@@ -1,8 +1,6 @@
 ﻿using Bachelorarbeit_Blazor_Wasm.Shared;
 using Microsoft.JSInterop;
-using System.Data.Common;
 using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace Bachelorarbeit_Blazor_Wasm.Utils
@@ -12,16 +10,21 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public Guid Identifier { get; set; } = Guid.NewGuid();
         public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
         private int _repeat => Config.GetValue<int>("RepeatBenchmark");
-        private Stopwatch _stopwatch { get; set; } = new();
+
+        public (int counter, int countOrder) ChildStartToFinCounter;
+        public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
+
+        public Stopwatch Stopwatch { get; set; } = new();
 
         public IConfiguration Config { get; set; }
 
         public BenchmarkUtil(IConfiguration config)
         {
             Config = config;
+            ChildStartToFinCounter = new(0, Config.GetValue<int>("CountOrders"));
         }
 
-        public void InvokeWithBenchmark(BenchmarkComponent component, Action<BenchmarkComponent> fn, string nameOfMethod, int? Repeat = null)
+        public void InvokeWithBenchmark(VersionComponent component, Action<VersionComponent> fn, string nameOfMethod, int? Repeat = null)
         {
             Repeat = Repeat ?? this._repeat;
 
@@ -33,39 +36,29 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
                 fn.Invoke(component);
 
                 stopwatch.Stop();
-
                 SbResult.AppendLine($"{component},{Identifier},{nameOfMethod},{stopwatch.ElapsedMilliseconds}");
                 Console.WriteLine($"{component} - {nameOfMethod} - {stopwatch.ElapsedMilliseconds} ms");
             }
         }
 
-        public void StartWatch()
-        {
-            if (!_stopwatch.IsRunning)
-            {
-                _stopwatch.Start();
-            }
-        }
-
-        public void ResetWatch()
-        {
-            if (_stopwatch.IsRunning)
-            {
-                _stopwatch.Reset();
-            }
-        }
-
         public void SetMarker(object component, string marker)
         {
-            if (_stopwatch.IsRunning)
+            if (Stopwatch.IsRunning)
             {
-                SbResult.AppendLine($"{component},{Identifier},{marker},{_stopwatch.ElapsedMilliseconds}");
-                Console.WriteLine($"{component} - {marker} - {_stopwatch.ElapsedMilliseconds} ms");
+                SbResult.AppendLine($"{component},{Identifier},{marker},{Stopwatch.ElapsedMilliseconds}");
+                Console.WriteLine($"{component} - {marker} - {Stopwatch.ElapsedMilliseconds} ms");
             }
             else
             {
                 Console.WriteLine($"Stopwatch not running, can't set marker");
             }
+        }
+
+        public void ResetBenchmark()
+        {
+            Stopwatch.Restart();
+            SbResult.Clear();
+            ChildStartToFinCounter = (0, ChildStartToFinCounter.countOrder);
         }
 
         public async ValueTask<object> DownloadFileAsync(IJSRuntime js, string fileName = "")

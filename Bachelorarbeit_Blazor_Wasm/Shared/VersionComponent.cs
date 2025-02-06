@@ -10,10 +10,9 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         public List<Order> Orders { get; set; } = new();
         public RenderChart RenderChart { get; set; } = new();
 
+
         [Inject]
         public IJSRuntime JS { get; set; }
-
-
 
 
         protected virtual void GenerateOrders(int countOrders)
@@ -55,12 +54,17 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             }
         }
 
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            return base.SetParametersAsync(parameters);
+        }
+
         protected override void OnInitialized()
         {
-            base.OnInitialized();
             var cOrder = Config.GetValue<int>("CountOrders");
-            if (IsBenchmark)
+            if (BenchmarkUtil.IsBenchmark )
             {
+                BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => GenerateOrders(cOrder), nameof(GenerateOrders), 1);
                 BenchmarkUtil.InvokeWithBenchmark(this, _ => PopulateChartOrderState(), nameof(PopulateChartOrderState));
             }
@@ -69,12 +73,11 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 GenerateOrders(cOrder);
                 PopulateChartOrderState();
             }
-            base.OnInitialized();
         }
 
         protected override void OnParametersSet()
         {
-            if (IsBenchmark)
+            if (BenchmarkUtil.IsBenchmark)
             {
                 BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
             }
@@ -84,18 +87,20 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (firstRender)
             {
-                if (IsBenchmark)
+                if (BenchmarkUtil.IsBenchmark)
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                     BenchmarkUtil.InvokeWithBenchmark(this, _ => VisualizeOrderStatusSuccess(), nameof(VisualizeOrderStatusSuccess));
+                    BenchmarkUtil.SetMarker(this, "FINISH");
                 }
                 else
                 {
                     VisualizeOrderStatusSuccess();
                 }
-                BenchmarkUtil.SetMarker(this, "FINISH");
             }
         }
+
+        protected override bool ShouldRender() => false;
 
         public override string ToString()
         {
