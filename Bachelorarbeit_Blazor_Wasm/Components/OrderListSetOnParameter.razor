@@ -116,6 +116,7 @@
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
+        SetInitialChildLifecycleMarker("SetParam");
         foreach (var parameter in parameters)
         {
             switch (parameter.Name)

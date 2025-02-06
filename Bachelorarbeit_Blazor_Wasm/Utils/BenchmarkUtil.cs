@@ -58,6 +58,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         {
             Stopwatch.Restart();
             SbResult.Clear();
+            SbResult.AppendLine("ObjInstance,Identifier,MethodName,ElapsedMilliseconds");
             ChildStartToFinCounter = (0, ChildStartToFinCounter.countOrder);
         }
 

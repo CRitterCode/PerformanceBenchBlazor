@@ -80,6 +80,7 @@
 
     public override Task SetParametersAsync(ParameterView parameters)
     {
+        SetInitialChildLifecycleMarker("SetParam");
         if (parameters.TryGetValue<Order>(nameof(Order), out var order))
         {
             Order = order;

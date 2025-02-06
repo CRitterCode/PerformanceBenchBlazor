@@ -23,27 +23,21 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
-            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
+            if (parameters.Equals(ParameterView.Empty) is not true)
             {
-                BenchmarkUtil.SetMarker(this, "SetParam");
+                SetInitialChildLifecycleMarker("SetParam");
             }
             return base.SetParametersAsync(parameters);
         }
 
         protected override void OnInitialized()
         {
-            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
-            {
-                BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
-            }
+            SetInitialChildLifecycleMarker("SetParam_OnInit");
         }
 
         protected override void OnParametersSet()
         {
-            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
-            {
-                BenchmarkUtil.SetMarker(this, "OnInit_OnParam");
-            }
+            SetInitialChildLifecycleMarker("OnInit_OnParam");
             BenchmarkUtil.ChildStartToFinCounter.counter++;
 
         }
@@ -53,6 +47,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
             if (firstRender)
             {
                 BenchmarkUtil.ChildStartToFinCounter.counter++;
+                //*2 da im initialen Lifecycle alle Orders einmal durchlaufen werden und mit counter++ addiert und dann wieder addiert - hier soll nur letzter genommen werden.
                 if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == BenchmarkUtil.ChildStartToFinCounter.countOrder * 2)
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
@@ -64,6 +59,14 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         }
 
         protected override bool ShouldRender() => false;
+
+        public void SetInitialChildLifecycleMarker(string marker)
+        {
+            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
+            {
+                BenchmarkUtil.SetMarker(this, marker);
+            }
+        }
 
         public override string ToString()
         {
