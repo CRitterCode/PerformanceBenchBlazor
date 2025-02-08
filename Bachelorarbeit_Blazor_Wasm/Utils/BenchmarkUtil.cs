@@ -21,7 +21,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public BenchmarkUtil(IConfiguration config)
         {
             Config = config;
-            ChildStartToFinCounter = 0;
         }
 
         public void InvokeWithBenchmark(VersionComponent component, Action<VersionComponent> fn, string nameOfMethod, int? Repeat = null)

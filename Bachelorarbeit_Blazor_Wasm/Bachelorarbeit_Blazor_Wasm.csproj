@@ -29,7 +29,7 @@
   </ItemGroup>
 
 	
-	<PropertyGroup Condition="'$(Configuration)' == 'NOAOT'">
+	<!--<PropertyGroup Condition="'$(Configuration)' == 'NOAOT'">
 		<WasmEnableSIMD>true</WasmEnableSIMD>
 		<PublishTrimmed>true</PublishTrimmed>
 		<CompressionEnabled>true</CompressionEnabled>
@@ -45,6 +45,17 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<CompressionEnabled>true</CompressionEnabled>
 		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>-->
+
+	<PropertyGroup>
+	<RunAOTCompilation>true</RunAOTCompilation>
+	<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
+
+	<WasmEnableSIMD>true</WasmEnableSIMD>
+	<PublishTrimmed>true</PublishTrimmed>
+	<InvariantGlobalization>true</InvariantGlobalization>
+	<CompressionEnabled>true</CompressionEnabled>
+	<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 		
 </Project>
