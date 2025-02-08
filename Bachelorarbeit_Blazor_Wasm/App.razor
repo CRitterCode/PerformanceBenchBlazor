@@ -17,7 +17,6 @@
     private Task OnNavigateAsync(NavigationContext args)
     {
         BenchmarkUtil.ResetBenchmark();
-        Console.WriteLine(BenchmarkUtil.Stopwatch.ElapsedMilliseconds);
         return Task.CompletedTask;
     }
 }

@@ -11,7 +11,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
         private int _repeat => Config.GetValue<int>("RepeatBenchmark");
 
-        public (int counter, int countOrder) ChildStartToFinCounter;
+        public int ChildStartToFinCounter;
         public bool IsBenchmark => Config.GetValue<bool>("IsBenchmark");
 
         public Stopwatch Stopwatch { get; set; } = new();
@@ -21,7 +21,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public BenchmarkUtil(IConfiguration config)
         {
             Config = config;
-            ChildStartToFinCounter = new(0, Config.GetValue<int>("CountOrders"));
+            ChildStartToFinCounter = 0;
         }
 
         public void InvokeWithBenchmark(VersionComponent component, Action<VersionComponent> fn, string nameOfMethod, int? Repeat = null)
@@ -59,7 +59,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
             Stopwatch.Restart();
             SbResult.Clear();
             SbResult.AppendLine("ObjInstance,Identifier,MethodName,ElapsedMilliseconds");
-            ChildStartToFinCounter = (0, ChildStartToFinCounter.countOrder);
+            ChildStartToFinCounter = 0;
         }
 
         public async ValueTask<object> DownloadFileAsync(IJSRuntime js, string fileName = "")

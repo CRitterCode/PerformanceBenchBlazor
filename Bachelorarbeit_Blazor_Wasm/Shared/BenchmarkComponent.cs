@@ -38,7 +38,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         protected override void OnParametersSet()
         {
             SetInitialChildLifecycleMarker("OnInit_OnParam");
-            BenchmarkUtil.ChildStartToFinCounter.counter++;
+            BenchmarkUtil.ChildStartToFinCounter++;
 
         }
 
@@ -46,23 +46,21 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         {
             if (firstRender)
             {
-                BenchmarkUtil.ChildStartToFinCounter.counter++;
-                //*2 da im initialen Lifecycle alle Orders einmal durchlaufen werden und mit counter++ addiert und dann wieder addiert - hier soll nur letzter genommen werden.
-                if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == BenchmarkUtil.ChildStartToFinCounter.countOrder * 2)
+                BenchmarkUtil.ChildStartToFinCounter--;
+                if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter == 0)
                 {
                     BenchmarkUtil.SetMarker(this, "OnParam_OnAfterRender");
                     BenchmarkUtil.SetMarker(this, "FINISH");
-                    BenchmarkUtil.ChildStartToFinCounter.counter = 0;
-                    BenchmarkUtil.Stopwatch.Reset();
+                    BenchmarkUtil.ResetBenchmark();
                 }
             }
         }
 
-        protected override bool ShouldRender() => false;
+        protected override bool ShouldRender() => true;
 
         public void SetInitialChildLifecycleMarker(string marker)
         {
-            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter.counter == 0)
+            if (BenchmarkUtil.IsBenchmark && BenchmarkUtil.ChildStartToFinCounter == 0)
             {
                 BenchmarkUtil.SetMarker(this, marker);
             }
@@ -71,7 +69,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         public override string ToString()
         {
             return nameof(BenchmarkComponent);
-        }
+        }   
     }
 }
 
