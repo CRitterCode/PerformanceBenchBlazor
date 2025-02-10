@@ -23,13 +23,8 @@
     <PackageReference Include="PSC.Blazor.Components.Chartjs" Version="8.0.8" />
 
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\UI\UI.csproj" />
-  </ItemGroup>
-
 	
-	<!--<PropertyGroup Condition="'$(Configuration)' == 'NOAOT'">
+	<PropertyGroup Condition="'$(Configuration)' == 'NOAOT'">
 		<WasmEnableSIMD>true</WasmEnableSIMD>
 		<PublishTrimmed>true</PublishTrimmed>
 		<CompressionEnabled>true</CompressionEnabled>
@@ -45,17 +40,6 @@
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<CompressionEnabled>true</CompressionEnabled>
 		<InvariantGlobalization>true</InvariantGlobalization>
-	</PropertyGroup>-->
-
-	<PropertyGroup>
-	<RunAOTCompilation>true</RunAOTCompilation>
-	<WasmStripILAfterAOT>true</WasmStripILAfterAOT>
-
-	<WasmEnableSIMD>true</WasmEnableSIMD>
-	<PublishTrimmed>true</PublishTrimmed>
-	<InvariantGlobalization>true</InvariantGlobalization>
-	<CompressionEnabled>true</CompressionEnabled>
-	<InvariantGlobalization>true</InvariantGlobalization>
 	</PropertyGroup>
 		
 </Project>
