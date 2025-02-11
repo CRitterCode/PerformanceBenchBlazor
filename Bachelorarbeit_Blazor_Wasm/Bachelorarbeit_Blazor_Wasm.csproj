@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Version6.razor" />
     <Content Remove="Pages\Version_mix.razor" />
   </ItemGroup>
 

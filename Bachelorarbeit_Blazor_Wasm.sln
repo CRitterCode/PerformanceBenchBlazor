@@ -5,8 +5,6 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bachelorarbeit_Blazor_Wasm", "Bachelorarbeit_Blazor_Wasm\Bachelorarbeit_Blazor_Wasm.csproj", "{67DF2CF0-FEA1-4928-8634-3987A891A9E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{8E267BB1-8151-4692-9B58-49F1DD495433}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		AOT|Any CPU = AOT|Any CPU
@@ -23,14 +21,6 @@ Global
 		{67DF2CF0-FEA1-4928-8634-3987A891A9E6}.NOAOT|Any CPU.Build.0 = NOAOT|Any CPU
 		{67DF2CF0-FEA1-4928-8634-3987A891A9E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67DF2CF0-FEA1-4928-8634-3987A891A9E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.AOT|Any CPU.ActiveCfg = AOT|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.AOT|Any CPU.Build.0 = AOT|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.NOAOT|Any CPU.ActiveCfg = NOAOT|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.NOAOT|Any CPU.Build.0 = NOAOT|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E267BB1-8151-4692-9B58-49F1DD495433}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

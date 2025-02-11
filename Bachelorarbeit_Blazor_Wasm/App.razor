@@ -1,4 +1,6 @@
 ﻿@inject BenchmarkUtil BenchmarkUtil
+@inject IConfiguration Config
+@inject NavigationManager NavManager
 
 <Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="@OnNavigateAsync">
     <Found Context="routeData">
@@ -14,8 +16,12 @@
 </Router>
 
 @code {
+    public string? RedirectToConfig => Config.GetValue<string>("RedirectTo");
     private Task OnNavigateAsync(NavigationContext args)
     {
+        if (!string.IsNullOrEmpty(RedirectToConfig) && string.IsNullOrEmpty(args.Path)){
+            NavManager.NavigateTo($"/{RedirectToConfig}");
+        }
         BenchmarkUtil.ResetBenchmark();
         return Task.CompletedTask;
     }

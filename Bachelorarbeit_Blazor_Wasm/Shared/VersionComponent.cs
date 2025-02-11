@@ -1,4 +1,4 @@
-﻿using Bachelorarbeit_Blazor_Wasm.Entities;
+﻿using Bachelorarbeit_Blazor_Wasm.Models;
 using Bachelorarbeit_Blazor_Wasm.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -99,6 +99,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
                 }
             }
         }
+
 
         protected override bool ShouldRender() => false;
 

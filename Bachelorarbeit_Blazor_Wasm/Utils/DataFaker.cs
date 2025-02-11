@@ -1,4 +1,4 @@
-﻿using Bachelorarbeit_Blazor_Wasm.Entities;
+﻿using Bachelorarbeit_Blazor_Wasm.Models;
 using Bogus;
 
 namespace Bachelorarbeit_Blazor_Wasm.Utils

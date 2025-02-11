@@ -1,12 +1,7 @@
 ﻿
-using Bachelorarbeit_Blazor_Wasm.Entities;
-using Bachelorarbeit_Blazor_Wasm.Pages;
 using Bachelorarbeit_Blazor_Wasm.Utils;
+using Bachelorarbeit_Blazor_Wasm.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.JSInterop;
-using System.Runtime.CompilerServices;
-
 namespace Bachelorarbeit_Blazor_Wasm.Shared
 {
     public class BenchmarkComponent : ComponentBase

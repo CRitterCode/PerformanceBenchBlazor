@@ -1,4 +1,4 @@
-﻿namespace Bachelorarbeit_Blazor_Wasm.Entities
+﻿namespace Bachelorarbeit_Blazor_Wasm.Models
 {
     public enum OrderState
     {
