@@ -11,10 +11,6 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
         public BenchmarkUtil BenchmarkUtil { get; set; }
 
 
-        [Inject]
-        public IConfiguration Config { get; set; }
-
-
 
         public override Task SetParametersAsync(ParameterView parameters)
         {

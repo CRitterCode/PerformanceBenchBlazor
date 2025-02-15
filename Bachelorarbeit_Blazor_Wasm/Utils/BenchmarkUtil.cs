@@ -8,7 +8,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
     public class BenchmarkUtil
     {
         public Guid Identifier { get; set; } = Guid.NewGuid();
-        public StringBuilder SbResult { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
+        private StringBuilder _strBuilder { get; set; } = new("ObjInstance,Identifier,MethodName,ElapsedMilliseconds\n");
         private int _repeat => Config.GetValue<int>("RepeatBenchmark");
 
         public int ChildStartToFinCounter;
@@ -23,7 +23,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
             Config = config;
         }
 
-        public void InvokeWithBenchmark(VersionComponent component, Action<VersionComponent> fn, string nameOfMethod, int? Repeat = null)
+        public void InvokeWithBenchmark(BenchmarkComponent component, Action<BenchmarkComponent> fn, string nameOfMethod, int? Repeat = null)
         {
             Repeat = Repeat ?? this._repeat;
 
@@ -35,7 +35,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
                 fn.Invoke(component);
 
                 stopwatch.Stop();
-                SbResult.AppendLine($"{component},{Identifier},{nameOfMethod},{stopwatch.ElapsedMilliseconds}");
+                _strBuilder.AppendLine($"{component},{Identifier},{nameOfMethod},{stopwatch.ElapsedMilliseconds}");
                 Console.WriteLine($"{component} - {nameOfMethod} - {stopwatch.ElapsedMilliseconds} ms");
             }
         }
@@ -44,7 +44,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         {
             if (Stopwatch.IsRunning)
             {
-                SbResult.AppendLine($"{component},{Identifier},{marker},{Stopwatch.ElapsedMilliseconds}");
+                _strBuilder.AppendLine($"{component},{Identifier},{marker},{Stopwatch.ElapsedMilliseconds}");
                 Console.WriteLine($"{component} - {marker} - {Stopwatch.ElapsedMilliseconds} ms");
             }
             else
@@ -56,8 +56,8 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         public void ResetBenchmark()
         {
             Stopwatch.Restart();
-            SbResult.Clear();
-            SbResult.AppendLine("ObjInstance,Identifier,MethodName,ElapsedMilliseconds");
+            _strBuilder.Clear();
+            _strBuilder.AppendLine("ObjInstance,Identifier,MethodName,ElapsedMilliseconds");
             ChildStartToFinCounter = 0;
         }
 
@@ -65,7 +65,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Utils
         {
             var cOrders = Config.GetValue<int>("CountOrders");
             var isAOT = Config.GetValue<bool>("AOT");
-            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier + "_" + cOrders + "_" + _repeat + "_" + isAOT, SbResult.ToString());
+            return await js.InvokeAsync<object>("SaveAsFile", fileName + "_" + Identifier + "_" + cOrders + "_" + _repeat + "_" + isAOT, _strBuilder.ToString());
         }
     }
 }

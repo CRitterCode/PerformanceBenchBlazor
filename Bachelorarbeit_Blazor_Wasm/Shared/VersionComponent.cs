@@ -61,7 +61,7 @@ namespace Bachelorarbeit_Blazor_Wasm.Shared
 
         protected override void OnInitialized()
         {
-            var cOrder = Config.GetValue<int>("CountOrders");
+            var cOrder = BenchmarkUtil.Config.GetValue<int>("CountOrders");
             if (BenchmarkUtil.IsBenchmark )
             {
                 BenchmarkUtil.SetMarker(this, "SetParam_OnInit");
