@@ -19,10 +19,10 @@
     public string? RedirectToConfig => Config.GetValue<string>("RedirectTo");
     private Task OnNavigateAsync(NavigationContext args)
     {
-        if (!string.IsNullOrEmpty(RedirectToConfig) && string.IsNullOrEmpty(args.Path)){
-            NavManager.NavigateTo($"/{RedirectToConfig}");
-        }
         BenchmarkUtil.ResetBenchmark();
+        // if (!string.IsNullOrEmpty(RedirectToConfig) && string.IsNullOrEmpty(args.Path)){
+        //     NavManager.NavigateTo($"/{RedirectToConfig}");
+        // }
         return Task.CompletedTask;
     }
 }
