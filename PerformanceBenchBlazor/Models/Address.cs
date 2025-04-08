@@ -1,4 +1,4 @@
-﻿namespace Bachelorarbeit_Blazor_Wasm.Models
+﻿namespace PerformanceBenchBlazor.Models
 {
     public class Address
     {

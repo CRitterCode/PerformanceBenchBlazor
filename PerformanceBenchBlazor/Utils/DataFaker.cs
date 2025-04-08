@@ -1,7 +1,7 @@
-﻿using Bachelorarbeit_Blazor_Wasm.Models;
+﻿using PerformanceBenchBlazor.Models;
 using Bogus;
 
-namespace Bachelorarbeit_Blazor_Wasm.Utils
+namespace PerformanceBenchBlazor.Utils
 {
     public static class DataFaker
     {

@@ -1,9 +1,9 @@
-﻿using Bachelorarbeit_Blazor_Wasm.Shared;
+﻿using PerformanceBenchBlazor.Shared;
 using Microsoft.JSInterop;
 using System.Diagnostics;
 using System.Text;
 
-namespace Bachelorarbeit_Blazor_Wasm.Utils
+namespace PerformanceBenchBlazor.Utils
 {
     public class BenchmarkUtil
     {

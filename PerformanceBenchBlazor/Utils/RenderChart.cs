@@ -2,7 +2,7 @@
 using PSC.Blazor.Components.Chartjs.Models.Bar;
 using PSC.Blazor.Components.Chartjs.Models.Pie;
 
-namespace Bachelorarbeit_Blazor_Wasm.Utils
+namespace PerformanceBenchBlazor.Utils
 {
     public class RenderChart
     {

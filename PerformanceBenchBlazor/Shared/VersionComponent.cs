@@ -1,9 +1,9 @@
-﻿using Bachelorarbeit_Blazor_Wasm.Models;
-using Bachelorarbeit_Blazor_Wasm.Utils;
+﻿using PerformanceBenchBlazor.Models;
+using PerformanceBenchBlazor.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace Bachelorarbeit_Blazor_Wasm.Shared
+namespace PerformanceBenchBlazor.Shared
 {
     public class VersionComponent : BenchmarkComponent
     {

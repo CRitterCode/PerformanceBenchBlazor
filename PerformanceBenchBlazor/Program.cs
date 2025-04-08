@@ -1,6 +1,6 @@
-using Bachelorarbeit_Blazor_Wasm;
-using Bachelorarbeit_Blazor_Wasm.Shared;
-using Bachelorarbeit_Blazor_Wasm.Utils;
+using PerformanceBenchBlazor;
+using PerformanceBenchBlazor.Shared;
+using PerformanceBenchBlazor.Utils;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
